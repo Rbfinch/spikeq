@@ -7,6 +7,7 @@ use rand::Rng;
 use regex::Regex;
 use serde::{Deserialize, Serialize}; // Added Serialize
 use std::fs;
+use uuid::Uuid;
 
 #[derive(Deserialize, Clone, Serialize)] // Added Serialize derive
 #[allow(dead_code)]
@@ -76,10 +77,13 @@ fn main() {
         .map(|pattern| Regex::new(&pattern.regex_string).expect("Invalid regex pattern"))
         .collect();
 
+    let uuid = Uuid::new_v4().to_string();
+    let mut output = String::new();
+
     match &args.command {
         Some(Commands::SpikeSequence {
             num_patterns,
-            num_sequences,
+            num_sequences: num_sp_sequences,
         }) => {
             let mut rng = rand::thread_rng();
             let selected_patterns: Vec<RegexPattern> = config
@@ -93,7 +97,7 @@ fn main() {
 
             for i in 0..args.num_sequences {
                 let mut sequence = generate_sequence(100, 600, &forbidden_patterns);
-                if i < *num_sequences {
+                if i < *num_sp_sequences {
                     insert_patterns(&mut sequence, &selected_patterns);
                     for (j, pattern) in selected_patterns.iter().enumerate() {
                         if sequence.contains(&pattern.regex_string) {
@@ -102,15 +106,14 @@ fn main() {
                     }
                 }
                 let quality_line = generate_quality_line(sequence.len(), &forbidden_patterns);
-                println!(
-                    "@{}:{} length={}",
+                output.push_str(&format!(
+                    "@{}:{} length={}\n{}\n+\n{}\n",
                     config.regex_set.regex_set_name,
                     config.regex_set.regex[0].regex_name,
-                    sequence.len()
-                );
-                println!("{}", sequence);
-                println!("+");
-                println!("{}", quality_line);
+                    sequence.len(),
+                    sequence,
+                    quality_line
+                ));
             }
 
             // Ensure the summary writing block is executed
@@ -125,32 +128,34 @@ fn main() {
                 })
                 .collect();
 
-            let output = serde_json::json!({
+            let output_json = serde_json::json!({
                 "config_file": args.config,
                 "num_sequences": args.num_sequences,
                 "num_patterns": num_patterns,
-                "num_sp_sequences": num_sequences,
+                "num_sp_sequences": num_sp_sequences,
+                "uuid": uuid,
                 "summary": summary
             });
 
             let summary_json =
-                serde_json::to_string_pretty(&output).expect("Failed to serialize summary");
+                serde_json::to_string_pretty(&output_json).expect("Failed to serialize summary");
             fs::write("inserted.json", summary_json).expect("Unable to write to inserted.json");
         }
         None => {
             for _ in 0..args.num_sequences {
                 let sequence = generate_sequence(100, 600, &forbidden_patterns);
                 let quality_line = generate_quality_line(sequence.len(), &forbidden_patterns);
-                println!(
-                    "@{}:{} length={}",
+                output.push_str(&format!(
+                    "@{}:{} length={}\n{}\n+\n{}\n",
                     config.regex_set.regex_set_name,
                     config.regex_set.regex[0].regex_name,
-                    sequence.len()
-                );
-                println!("{}", sequence);
-                println!("+");
-                println!("{}", quality_line);
+                    sequence.len(),
+                    sequence,
+                    quality_line
+                ));
             }
         }
     }
+
+    fs::write(format!("{}.txt", uuid), output).expect("Unable to write to file");
 }
