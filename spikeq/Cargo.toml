@@ -1,0 +1,29 @@
+[package]
+name = "spikeq"
+version = "0.1.0"
+edition = "2021"
+authors = ["Nicholas D. Crosbie"]
+license = "MIT"
+description = "Randomly spike synthetic and real FASTQ files from a sequence list"
+homepage = "https://github.com/Rbfinch/spikeq"
+documentation = "https://github.com/Rbfinch/spikeq"
+repository = "https://github.com/Rbfinch/spikeq"
+readme = "README.md"
+categories = ["science"]
+keywords = ["bioinformatics", "FASTQ", "JSON", "gzip", "random spiking"]
+
+[dependencies]
+seq_io = "0.3.2"
+regex = "1.11.1"
+mimalloc = "0.1.43"
+clap = { version = "4.5.20", features = ["derive", "cargo"] }
+num_cpus = "1.16.0"
+flate2 = "1.0.35"
+jsonschema = "0.26.1"
+serde_json = "1.0.133"
+rand = "0.8.5"
+serde = { version = "1.0.215", features = ["derive"] }
+
+
+[profile.release]
+lto = true
