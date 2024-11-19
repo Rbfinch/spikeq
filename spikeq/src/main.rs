@@ -1,10 +1,14 @@
+mod arg;
+
+use crate::arg::{Args, Commands}; // Import Args and Commands
+use clap::Parser;
+use rand::seq::SliceRandom;
 use rand::Rng;
 use regex::Regex;
-use serde::Deserialize;
-use std::env;
+use serde::{Deserialize, Serialize}; // Added Serialize
 use std::fs;
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Clone, Serialize)] // Added Serialize derive
 #[allow(dead_code)]
 struct RegexPattern {
     regex_name: String,
@@ -51,25 +55,18 @@ fn generate_quality_line(length: usize, forbidden_patterns: &[Regex]) -> String 
     }
 }
 
-fn main() {
-    let args: Vec<String> = env::args().collect();
-    if args.len() < 2 {
-        eprintln!(
-            "Usage: {} <config_file> [-n <number_of_sequences>]",
-            args[0]
-        );
-        std::process::exit(1);
+fn insert_patterns(sequence: &mut String, patterns: &[RegexPattern]) {
+    let mut rng = rand::thread_rng();
+    for pattern in patterns {
+        let pos = rng.gen_range(0..=sequence.len());
+        sequence.insert_str(pos, &pattern.regex_string);
     }
-    let config_file = &args[1];
-    let num_sequences = if args.len() == 4 && args[2] == "-n" {
-        args[3]
-            .parse::<usize>()
-            .expect("Invalid number of sequences")
-    } else {
-        1
-    };
+}
 
-    let config_data = fs::read_to_string(config_file).expect("Unable to read config file");
+fn main() {
+    let args = Args::parse();
+
+    let config_data = fs::read_to_string(&args.config).expect("Unable to read config file");
     let config: Config = serde_json::from_str(&config_data).expect("Unable to parse config file");
 
     let forbidden_patterns: Vec<Regex> = config
@@ -79,17 +76,73 @@ fn main() {
         .map(|pattern| Regex::new(&pattern.regex_string).expect("Invalid regex pattern"))
         .collect();
 
-    for _ in 0..num_sequences {
-        let sequence = generate_sequence(100, 600, &forbidden_patterns);
-        let quality_line = generate_quality_line(sequence.len(), &forbidden_patterns);
-        println!(
-            "@{}:{} length={}",
-            config.regex_set.regex_set_name,
-            config.regex_set.regex[0].regex_name,
-            sequence.len()
-        );
-        println!("{}", sequence);
-        println!("+");
-        println!("{}", quality_line);
+    match &args.command {
+        Some(Commands::SpikeSequence {
+            num_patterns,
+            num_sequences,
+        }) => {
+            let mut rng = rand::thread_rng();
+            let selected_patterns: Vec<RegexPattern> = config
+                .regex_set
+                .regex
+                .choose_multiple(&mut rng, *num_patterns)
+                .cloned()
+                .collect();
+
+            let mut pattern_counts = vec![0; *num_patterns];
+
+            for i in 0..args.num_sequences {
+                let mut sequence = generate_sequence(100, 600, &forbidden_patterns);
+                if i < *num_sequences {
+                    insert_patterns(&mut sequence, &selected_patterns);
+                    for (j, pattern) in selected_patterns.iter().enumerate() {
+                        if sequence.contains(&pattern.regex_string) {
+                            pattern_counts[j] += 1;
+                        }
+                    }
+                }
+                let quality_line = generate_quality_line(sequence.len(), &forbidden_patterns);
+                println!(
+                    "@{}:{} length={}",
+                    config.regex_set.regex_set_name,
+                    config.regex_set.regex[0].regex_name,
+                    sequence.len()
+                );
+                println!("{}", sequence);
+                println!("+");
+                println!("{}", quality_line);
+            }
+
+            // Ensure the summary writing block is executed
+            let summary: Vec<_> = selected_patterns
+                .iter()
+                .zip(pattern_counts.iter())
+                .map(|(pattern, &count)| {
+                    serde_json::json!({
+                        "pattern_name": pattern.regex_name,
+                        "inserted_count": count
+                    })
+                })
+                .collect();
+
+            let summary_json =
+                serde_json::to_string_pretty(&summary).expect("Failed to serialize summary");
+            fs::write("inserted.json", summary_json).expect("Unable to write to inserted.json");
+        }
+        None => {
+            for _ in 0..args.num_sequences {
+                let sequence = generate_sequence(100, 600, &forbidden_patterns);
+                let quality_line = generate_quality_line(sequence.len(), &forbidden_patterns);
+                println!(
+                    "@{}:{} length={}",
+                    config.regex_set.regex_set_name,
+                    config.regex_set.regex[0].regex_name,
+                    sequence.len()
+                );
+                println!("{}", sequence);
+                println!("+");
+                println!("{}", quality_line);
+            }
+        }
     }
 }
