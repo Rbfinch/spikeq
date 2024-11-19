@@ -125,8 +125,16 @@ fn main() {
                 })
                 .collect();
 
+            let output = serde_json::json!({
+                "config_file": args.config,
+                "num_sequences": args.num_sequences,
+                "num_patterns": num_patterns,
+                "num_sp_sequences": num_sequences,
+                "summary": summary
+            });
+
             let summary_json =
-                serde_json::to_string_pretty(&summary).expect("Failed to serialize summary");
+                serde_json::to_string_pretty(&output).expect("Failed to serialize summary");
             fs::write("inserted.json", summary_json).expect("Unable to write to inserted.json");
         }
         None => {

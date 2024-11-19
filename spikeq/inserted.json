@@ -1,10 +1,16 @@
-[
-  {
-    "inserted_count": 10,
-    "pattern_name": "regex2"
-  },
-  {
-    "inserted_count": 10,
-    "pattern_name": "regex19"
-  }
-]
+{
+  "config_file": "./examples/regex.json",
+  "num_patterns": 2,
+  "num_sequences": 1000,
+  "num_sp_sequences": 10,
+  "summary": [
+    {
+      "inserted_count": 9,
+      "pattern_name": "regex7"
+    },
+    {
+      "inserted_count": 10,
+      "pattern_name": "regex29"
+    }
+  ]
+}
