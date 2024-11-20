@@ -80,6 +80,8 @@ fn main() {
     let uuid = Uuid::new_v4().to_string();
     let mut output = String::new();
 
+    let (min_length, max_length) = args.length;
+
     match &args.command {
         Some(Commands::SpikeSequence {
             num_patterns,
@@ -96,7 +98,7 @@ fn main() {
             let mut pattern_counts = vec![0; *num_patterns];
 
             for i in 0..args.num_sequences {
-                let mut sequence = generate_sequence(100, 600, &forbidden_patterns);
+                let mut sequence = generate_sequence(min_length, max_length, &forbidden_patterns);
                 if i < *num_sp_sequences {
                     insert_patterns(&mut sequence, &selected_patterns);
                     for (j, pattern) in selected_patterns.iter().enumerate() {
@@ -134,6 +136,8 @@ fn main() {
                 "num_patterns": num_patterns,
                 "num_sp_sequences": num_sp_sequences,
                 "uuid": uuid,
+                "min_length": min_length,
+                "max_length": max_length,
                 "summary": summary
             });
 
@@ -143,7 +147,7 @@ fn main() {
         }
         None => {
             for _ in 0..args.num_sequences {
-                let sequence = generate_sequence(100, 600, &forbidden_patterns);
+                let sequence = generate_sequence(min_length, max_length, &forbidden_patterns);
                 let quality_line = generate_quality_line(sequence.len(), &forbidden_patterns);
                 output.push_str(&format!(
                     "@{}:{} length={}\n{}\n+\n{}\n",

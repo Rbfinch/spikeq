@@ -17,6 +17,15 @@ pub struct Args {
     )]
     pub num_sequences: usize,
 
+    #[arg(
+        short = 'l',
+        long = "length",
+        help = "Sets the sequence length range in the form X,Y",
+        value_parser = parse_length_range,
+        default_value = "100,600"
+    )]
+    pub length: (usize, usize),
+
     #[command(subcommand)]
     pub command: Option<Commands>,
 }
@@ -31,4 +40,24 @@ pub enum Commands {
         #[arg(short, long, help = "Number of sequences to spike patterns into")]
         num_sequences: usize,
     },
+}
+
+fn parse_length_range(s: &str) -> Result<(usize, usize), String> {
+    let parts: Vec<&str> = s.split(',').collect();
+    if parts.len() != 2 {
+        return Err(format!("Invalid length range: {}", s));
+    }
+    let min_length = parts[0]
+        .parse::<usize>()
+        .map_err(|_| format!("Invalid number: {}", parts[0]))?;
+    let max_length = parts[1]
+        .parse::<usize>()
+        .map_err(|_| format!("Invalid number: {}", parts[1]))?;
+    if min_length > max_length {
+        return Err(format!(
+            "Min length cannot be greater than max length: {}",
+            s
+        ));
+    }
+    Ok((min_length, max_length))
 }
