@@ -109,9 +109,7 @@ fn main() {
                 }
                 let quality_line = generate_quality_line(sequence.len(), &forbidden_patterns);
                 output.push_str(&format!(
-                    "@{}:{} length={}\n{}\n+\n{}\n",
-                    config.regex_set.regex_set_name,
-                    config.regex_set.regex[0].regex_name,
+                    "@SRX22685872.1 A00627:493:HKF5GDSX5:1:1101:15239:1047 length={}\n{}\n+\n{}\n", // dummy header
                     sequence.len(),
                     sequence,
                     quality_line
