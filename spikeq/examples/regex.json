@@ -4,123 +4,23 @@
         "regex": [
             {
                 "regex_name": "regex1",
-                "regex_string": "[AG]AAT[AT]G[AG]CGGGG"
+                "regex_string": "AAATTGGCGGGG"
             },
             {
                 "regex_name": "regex2",
-                "regex_string": "CCCCG[CT]C[AT]ATT[CT]"
+                "regex_string": "CCCCGTCAATTT"
             },
             {
                 "regex_name": "regex3",
-                "regex_string": "GG[AG][ACGT]GGC[ACGT]GCAG"
+                "regex_string": "GGGAGGCTGCAG"
             },
             {
                 "regex_name": "regex4",
-                "regex_string": "CTGC[ACGT]GCC[ACTG][CT]CC"
+                "regex_string": "CTGCTGCCTGCTCC"
             },
             {
                 "regex_name": "regex5",
-                "regex_string": "G[CT][CT]G[CT]CGTCAGC"
-            },
-            {
-                "regex_name": "regex6",
-                "regex_string": "GCTGACG[AG]C[AG][AG]C"
-            },
-            {
-                "regex_name": "regex7",
-                "regex_string": "C[ACG]GC[ACGT]GC[CT]GCGG"
-            },
-            {
-                "regex_name": "regex8",
-                "regex_string": "CCGC[AG]GC[AGCT]GC[CGT]G"
-            },
-            {
-                "regex_name": "regex9",
-                "regex_string": "TAGA[AT]ACCC[ACGT][ACGT]G"
-            },
-            {
-                "regex_name": "regex10",
-                "regex_string": "C[ACGT][ACGT]GGGT[AT]TCTA"
-            },
-            {
-                "regex_name": "regex11",
-                "regex_string": "CGAGCGCAACCC"
-            },
-            {
-                "regex_name": "regex12",
-                "regex_string": "GGGTTGCGCTCG"
-            },
-            {
-                "regex_name": "regex13",
-                "regex_string": "AGG[CT]GGGGA[CT]GA"
-            },
-            {
-                "regex_name": "regex14",
-                "regex_string": "TC[AG]TCCCC[AG]CCT"
-            },
-            {
-                "regex_name": "regex15",
-                "regex_string": "[GC][CT]GGCG[ACGT]ACGGG"
-            },
-            {
-                "regex_name": "regex16",
-                "regex_string": "CCCGT[ACGT]CGCC[AG][GC]"
-            },
-            {
-                "regex_name": "regex17",
-                "regex_string": "GA[AG]GAACCTTAC"
-            },
-            {
-                "regex_name": "regex18",
-                "regex_string": "GTAAGGTTC[CT]TC"
-            },
-            {
-                "regex_name": "regex19",
-                "regex_string": "GTGGTTTAATTC"
-            },
-            {
-                "regex_name": "regex20",
-                "regex_string": "GAATTAAACCAC"
-            },
-            {
-                "regex_name": "regex21",
-                "regex_string": "G[CT]AC[AT]C[AT]CCGCC"
-            },
-            {
-                "regex_name": "regex22",
-                "regex_string": "GGCGG[AT]G[AT]GT[AG]C"
-            },
-            {
-                "regex_name": "regex23",
-                "regex_string": "GC[TG]ACACACG[CT]G"
-            },
-            {
-                "regex_name": "regex24",
-                "regex_string": "C[AG]CGTGTGT[AC]GC"
-            },
-            {
-                "regex_name": "regex25",
-                "regex_string": "G[AC]GGTGAAAT[TG]C"
-            },
-            {
-                "regex_name": "regex26",
-                "regex_string": "G[AC]ATTTCACC[TG]C"
-            },
-            {
-                "regex_name": "regex27",
-                "regex_string": "AT[CT][AC]TGGCTCAG"
-            },
-            {
-                "regex_name": "regex28",
-                "regex_string": "CTGAGCCA[TG][AG]AT"
-            },
-            {
-                "regex_name": "regex29",
-                "regex_string": "AGTC[AG]TAACAAG"
-            },
-            {
-                "regex_name": "regex30",
-                "regex_string": "CTTGTTA[CT]GACT"
+                "regex_string": "GTTGTCGTCAGC"
             }
         ]
     }

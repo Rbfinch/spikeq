@@ -1,0 +1,27 @@
+{
+    "regexSet": {
+        "regexSetName": "exampleRegexSet",
+        "regex": [
+            {
+                "regexName": "regex1",
+                "regexString": "[AG]AAT[AT]G[AG]CGGGG"
+            },
+            {
+                "regexName": "regex2",
+                "regexString": "CCCCG[CT]C[AT]ATT[CT]"
+            },
+            {
+                "regexName": "regex3",
+                "regexString": "GG[AG][ACGT]GGC[ACGT]GCAG"
+            },
+            {
+                "regexName": "regex4",
+                "regexString": "CTGC[ACGT]GCC[ACTG][CT]CC"
+            },
+            {
+                "regexName": "regex5",
+                "regexString": "G[CT][CT]G[CT]CGTCAGC"
+            }
+        ]
+    }
+}

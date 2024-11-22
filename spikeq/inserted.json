@@ -1,0 +1,19 @@
+{
+  "config_file": "./examples/regex.json",
+  "max_length": 800,
+  "min_length": 200,
+  "num_patterns": 2,
+  "num_sequences": 1000,
+  "num_sp_sequences": 10,
+  "summary": [
+    {
+      "inserted_count": 10,
+      "pattern_name": "regex1"
+    },
+    {
+      "inserted_count": 10,
+      "pattern_name": "regex4"
+    }
+  ],
+  "uuid": "13d136c5-0412-4c81-9a80-2ab622d3e4a0"
+}
