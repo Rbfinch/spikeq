@@ -1,5 +1,4 @@
 {
-  "config_file": "./examples/regex.json",
   "max_length": 800,
   "min_length": 200,
   "num_patterns": 2,
@@ -8,12 +7,12 @@
   "summary": [
     {
       "inserted_count": 10,
-      "pattern_name": "regex1"
+      "pattern_name": "CCGCGGCTGCGG"
     },
     {
       "inserted_count": 10,
-      "pattern_name": "regex4"
+      "pattern_name": "TAGATACCCACG"
     }
   ],
-  "uuid": "13d136c5-0412-4c81-9a80-2ab622d3e4a0"
+  "uuid": "3c11b76f-9d1e-4a8b-be28-17efe74189e7"
 }

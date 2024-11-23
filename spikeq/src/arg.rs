@@ -6,9 +6,6 @@ use clap::{Parser, Subcommand};
 #[command(author = "Nicholas D. Crosbie")]
 #[command(about = "Generates sequences with optional spiked patterns")]
 pub struct Args {
-    #[arg(help = "Sets the config file to use")]
-    pub config: String,
-
     #[arg(
         short,
         long,
@@ -26,6 +23,14 @@ pub struct Args {
     )]
     pub length: (usize, usize),
 
+    #[arg(
+        short,
+        long,
+        help = "Sets the forbidden patterns file to use",
+        required = false
+    )]
+    pub forbidden_patterns: Option<String>,
+
     #[command(subcommand)]
     pub command: Option<Commands>,
 }
@@ -34,10 +39,10 @@ pub struct Args {
 pub enum Commands {
     #[command(about = "Generates sequences with spiked patterns")]
     SpikeSequence {
-        #[arg(short, long, help = "Number of patterns to spike into sequences")]
+        #[arg(short = 'n', long, help = "Number of patterns to spike into sequences")]
         num_patterns: usize,
 
-        #[arg(short, long, help = "Number of sequences to spike patterns into")]
+        #[arg(short = 's', long, help = "Number of sequences to spike patterns into")]
         num_sequences: usize,
     },
 }
