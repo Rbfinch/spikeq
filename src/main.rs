@@ -27,7 +27,7 @@ struct RegexSet {
     regex: Vec<RegexPattern>,
 }
 
-fn generate_sequence(min_length: usize, max_length: usize, forbidden_patterns: &[Regex]) -> String {
+fn generate_sequence(min_length: usize, max_length: usize, regex_patterns: &[Regex]) -> String {
     let chars = ['A', 'C', 'T', 'G'];
     let mut rng = rand::thread_rng();
     let length = rng.gen_range(min_length..=max_length);
@@ -35,20 +35,20 @@ fn generate_sequence(min_length: usize, max_length: usize, forbidden_patterns: &
         let sequence: String = (0..length)
             .map(|_| chars[rng.gen_range(0..chars.len())])
             .collect();
-        if !forbidden_patterns.iter().any(|re| re.is_match(&sequence)) {
+        if !regex_patterns.iter().any(|re| re.is_match(&sequence)) {
             return sequence;
         }
     }
 }
 
-fn generate_quality_line(length: usize, forbidden_patterns: &[Regex]) -> String {
+fn generate_quality_line(length: usize, regex_patterns: &[Regex]) -> String {
     let chars: Vec<char> = r#"!\"\#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~"#.chars().collect();
     let mut rng = rand::thread_rng();
     loop {
         let line: String = (0..length)
             .map(|_| chars[rng.gen_range(0..chars.len())])
             .collect();
-        if !forbidden_patterns.iter().any(|re| re.is_match(&line)) {
+        if !regex_patterns.iter().any(|re| re.is_match(&line)) {
             return line;
         }
     }
@@ -65,10 +65,10 @@ fn insert_patterns(sequence: &mut String, patterns: &[Regex]) {
 fn main() {
     let args = Args::parse();
 
-    let mut forbidden_patterns: Vec<Regex> = vec![];
+    let mut regex_patterns: Vec<Regex> = vec![];
 
-    if let Some(forbidden_patterns_file) = &args.forbidden_patterns {
-        let additional_patterns = read_base_strings_from_json(forbidden_patterns_file)
+    if let Some(regex_patterns_file) = &args.regex_patterns {
+        let additional_patterns = read_base_strings_from_json(regex_patterns_file)
             .expect("Unable to read forbidden patterns file");
         let iupac_regexes = get_iupac_regexes();
         for pattern in additional_patterns {
@@ -76,7 +76,7 @@ fn main() {
             for (re, replacements) in &iupac_regexes {
                 expanded_patterns = expand_strings(expanded_patterns, re, replacements);
             }
-            forbidden_patterns.extend(
+            regex_patterns.extend(
                 expanded_patterns
                     .into_iter()
                     .map(|p| Regex::new(&p).expect("Invalid regex pattern")),
@@ -95,7 +95,7 @@ fn main() {
             num_sequences: num_spiked_sequences,
         }) => {
             let mut rng = rand::thread_rng();
-            let selected_patterns: Vec<Regex> = forbidden_patterns
+            let selected_patterns: Vec<Regex> = regex_patterns
                 .choose_multiple(&mut rng, *num_patterns)
                 .cloned()
                 .collect();
@@ -103,7 +103,7 @@ fn main() {
             let mut pattern_counts = vec![0; *num_patterns];
 
             for i in 0..args.num_sequences {
-                let mut sequence = generate_sequence(min_length, max_length, &forbidden_patterns);
+                let mut sequence = generate_sequence(min_length, max_length, &regex_patterns);
                 if i < *num_spiked_sequences {
                     insert_patterns(&mut sequence, &selected_patterns);
                     for (j, pattern) in selected_patterns.iter().enumerate() {
@@ -112,7 +112,7 @@ fn main() {
                         }
                     }
                 }
-                let quality_line = generate_quality_line(sequence.len(), &forbidden_patterns);
+                let quality_line = generate_quality_line(sequence.len(), &regex_patterns);
                 output.push_str(&format!(
                     "@SRX22685872.1 A00627:493:HKF5GDSX5:1:1101:15239:1047 length={}\n{}\n+\n{}\n", // dummy header
                     sequence.len(),
@@ -133,9 +133,8 @@ fn main() {
                 })
                 .collect();
 
-            let regex_set_name = if let Some(forbidden_patterns_file) = &args.forbidden_patterns {
-                let file =
-                    std::fs::File::open(forbidden_patterns_file).expect("Unable to open file");
+            let regex_set_name = if let Some(regex_patterns_file) = &args.regex_patterns {
+                let file = std::fs::File::open(regex_patterns_file).expect("Unable to open file");
                 let reader = std::io::BufReader::new(file);
                 let json: serde_json::Value =
                     serde_json::from_reader(reader).expect("Unable to parse JSON");
@@ -164,8 +163,8 @@ fn main() {
         }
         None => {
             for _ in 0..args.num_sequences {
-                let sequence = generate_sequence(min_length, max_length, &forbidden_patterns);
-                let quality_line = generate_quality_line(sequence.len(), &forbidden_patterns);
+                let sequence = generate_sequence(min_length, max_length, &regex_patterns);
+                let quality_line = generate_quality_line(sequence.len(), &regex_patterns);
                 output.push_str(&format!(
                     "@{}:{} length={}\n{}\n+\n{}\n",
                     "default_set_name",

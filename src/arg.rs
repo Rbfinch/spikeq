@@ -1,10 +1,31 @@
 use clap::{Parser, Subcommand};
 
 #[derive(Parser)]
-#[command(name = "SpikeQ")]
-#[command(version = "1.0")]
-#[command(author = "Nicholas D. Crosbie")]
-#[command(about = "Generates sequences with optional spiked patterns")]
+#[command(
+    name = "spikeq",
+    author = "Nicholas D. Crosbie",
+    version = clap::crate_version!(),
+    about = "A synthetic FASTQ record generator with regex pattern spiking",
+    long_about = "Copyright (c) 2024 Nicholas D. Crosbie, licensed under the MIT License.",
+    after_help = "
+       EXAMPLES:
+             - Generate 1000 synthetic FASTQ records with sequence lengths between 200 and 800, and which are free from the regex patterns specified in the regex.json file
+                  `spikeq -r regex.json -n 1000 -l 200,800`
+
+             - Generate 1000 synthetic FASTQ records with sequence lengths between 200 and 800, and which are free from the regex patterns specified in the regex.json file, then insert two regex patterns drawn randomly from the regex.json file into 10 sequences (generated the FASTQ file named `4b1f92dc-14e1-496f-a68b-d1683251d827.fastq`, and the summary file named `inserted.json` )
+                  `spikeq -r regex.json -n 1000 -l 200,800 spike-sequence --num-patterns 2 --num-sequences 10`
+
+           TIPS:
+             - Ensure you have enough storage space for output files.
+
+          NOTES:
+             - The regex patterns should only include the DNA sequence characters (A, C, G, T), and not IUPAC ambiguity codes (N, R, Y, etc.). If your regex patterns contain any IUPAC ambiguity codes, then transform them to DNA sequence characters (A, C, G, T) before using them with `spikeq`. See `regex.json` in the `examples` directory for an example of valid pattern file.
+
+             - Regex patterns with look-around and backreferences are not supported.
+
+Copyright (c) 2024 Nicholas D. Crosbie, licensed under the MIT License."
+)]
+
 pub struct Args {
     #[arg(
         short,
@@ -17,7 +38,7 @@ pub struct Args {
     #[arg(
         short = 'l',
         long = "length",
-        help = "Sets the sequence length range in the form X,Y",
+        help = "Sets the sequence length range in the form <MIN_LENGTH>,<MAX_LENGTH>",
         value_parser = parse_length_range,
         default_value = "100,600"
     )]
@@ -26,10 +47,10 @@ pub struct Args {
     #[arg(
         short,
         long,
-        help = "Sets the forbidden patterns file to use",
+        help = "Sets the regex patterns file to use",
         required = false
     )]
-    pub forbidden_patterns: Option<String>,
+    pub regex_patterns: Option<String>,
 
     #[command(subcommand)]
     pub command: Option<Commands>,
@@ -38,7 +59,7 @@ pub struct Args {
 #[derive(Subcommand)]
 pub enum Commands {
     #[command(
-        about = "Generates synthetic FASTQ records free of forbidden regex patterns, or containing sequences with 'spiked' regex patterns"
+        about = "Generates synthetic FASTQ file containing sequences with spiked regex patterns"
     )]
     SpikeSequence {
         #[arg(short = 'n', long, help = "Number of patterns to spike into sequences")]

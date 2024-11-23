@@ -6,7 +6,7 @@ use std::path::Path;
 static SCHEMA: &str = r#"
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "title": "grepq",
+    "title": "spikeq",
     "version": 1,
     "type": "object",
     "properties": {

@@ -1,7 +1,7 @@
 {
   "Maximum sequence length": 800,
   "Minimum sequence length": 200,
-  "Name of generated FASTQ file": "7ef2aa7c-0625-491f-967a-f6cda1a9518c",
+  "Name of generated FASTQ file": "4b1f92dc-14e1-496f-a68b-d1683251d827",
   "Name of the regex set": "exampleRegexSet",
   "Number of generated FASTQ records": 1000,
   "Number of spiked patterns": 2,
@@ -9,11 +9,11 @@
   "Summary of spiked patterns": [
     {
       "Number of insertions of spiked pattern": 10,
-      "Spiked pattern": "CCCCGCCTATTT"
+      "Spiked pattern": "GCTGCCGTCAGC"
     },
     {
       "Number of insertions of spiked pattern": 10,
-      "Spiked pattern": "CAGGGGTATCTA"
+      "Spiked pattern": "CTGAGCCAGGAT"
     }
   ]
 }
