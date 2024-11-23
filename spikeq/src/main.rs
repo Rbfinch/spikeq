@@ -92,7 +92,7 @@ fn main() {
     match &args.command {
         Some(Commands::SpikeSequence {
             num_patterns,
-            num_sequences: num_sp_sequences,
+            num_sequences: num_spiked_sequences,
         }) => {
             let mut rng = rand::thread_rng();
             let selected_patterns: Vec<Regex> = forbidden_patterns
@@ -104,7 +104,7 @@ fn main() {
 
             for i in 0..args.num_sequences {
                 let mut sequence = generate_sequence(min_length, max_length, &forbidden_patterns);
-                if i < *num_sp_sequences {
+                if i < *num_spiked_sequences {
                     insert_patterns(&mut sequence, &selected_patterns);
                     for (j, pattern) in selected_patterns.iter().enumerate() {
                         if sequence.contains(pattern.as_str()) {
@@ -127,20 +127,35 @@ fn main() {
                 .zip(pattern_counts.iter())
                 .map(|(pattern, &count)| {
                     serde_json::json!({
-                        "pattern_name": pattern.as_str(),
-                        "inserted_count": count
+                        "Spiked pattern": pattern.as_str(),
+                        "Number of insertions of spiked pattern": count
                     })
                 })
                 .collect();
 
+            let regex_set_name = if let Some(forbidden_patterns_file) = &args.forbidden_patterns {
+                let file =
+                    std::fs::File::open(forbidden_patterns_file).expect("Unable to open file");
+                let reader = std::io::BufReader::new(file);
+                let json: serde_json::Value =
+                    serde_json::from_reader(reader).expect("Unable to parse JSON");
+                json["regexSet"]["regexSetName"]
+                    .as_str()
+                    .unwrap_or("unknown")
+                    .to_string()
+            } else {
+                "unknown".to_string()
+            };
+
             let output_json = serde_json::json!({
-                "num_sequences": args.num_sequences,
-                "num_patterns": num_patterns,
-                "num_sp_sequences": num_sp_sequences,
-                "uuid": uuid,
-                "min_length": min_length,
-                "max_length": max_length,
-                "summary": summary
+                "Number of generated FASTQ records": args.num_sequences,
+                "Number of spiked patterns": num_patterns,
+                "Number of spiked sequences": num_spiked_sequences,
+                "Name of generated FASTQ file": uuid,
+                "Minimum sequence length": min_length,
+                "Maximum sequence length": max_length,
+                "Name of the regex set": regex_set_name, // Modified line
+                "Summary of spiked patterns": summary
             });
 
             let summary_json =
@@ -154,7 +169,7 @@ fn main() {
                 output.push_str(&format!(
                     "@{}:{} length={}\n{}\n+\n{}\n",
                     "default_set_name",
-                    "default_pattern_name",
+                    "default_spiked_pattern",
                     sequence.len(),
                     sequence,
                     quality_line
@@ -163,7 +178,7 @@ fn main() {
         }
     }
 
-    fs::write(format!("{}.txt", uuid), output).expect("Unable to write to file");
+    fs::write(format!("{}", uuid), output).expect("Unable to write to file");
 }
 
 fn expand_strings(strings: Vec<String>, re: &Regex, replacements: &[&str]) -> Vec<String> {

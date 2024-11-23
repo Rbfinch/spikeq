@@ -38,7 +38,7 @@ pub struct Args {
 #[derive(Subcommand)]
 pub enum Commands {
     #[command(
-        about = "Generates synthetic FASTQ records free of forbidden patterns, or containing sequences with 'spiked' patterns"
+        about = "Generates synthetic FASTQ records free of forbidden regex patterns, or containing sequences with 'spiked' regex patterns"
     )]
     SpikeSequence {
         #[arg(short = 'n', long, help = "Number of patterns to spike into sequences")]
