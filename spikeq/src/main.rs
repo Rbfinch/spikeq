@@ -1,13 +1,13 @@
 mod arg;
-mod initialise;
 mod iupac;
+mod read_regex;
 
 use crate::arg::{Args, Commands}; // Import Args and Commands
 use clap::Parser;
-use initialise::read_base_strings_from_json;
 use iupac::get_iupac_regexes;
 use rand::seq::SliceRandom;
 use rand::Rng;
+use read_regex::read_base_strings_from_json;
 use regex::Regex;
 use serde::{Deserialize, Serialize}; // Added Serialize
 use std::fs;
