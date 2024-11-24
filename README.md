@@ -35,7 +35,7 @@ The regex patterns should only include the DNA sequence characters (A, C, G, T),
 
 
 
-### Examples
+## Examples
 
 ```sh
 # Generate 1000 synthetic FASTQ records with sequence lengths between 200 and 800, and which are free from the regex patterns specified in the regex.json file (generated the FASTQ file named `459cac6f-8d65-48ed-99aa-f03930b3c02f.fastq`).
@@ -44,6 +44,13 @@ spikeq -r regex.json -n 1000 -l 200,800
 # Generate 1000 synthetic FASTQ records with sequence lengths between 200 and 800, and which are free from the regex patterns specified in the regex.json file, then insert two regex patterns drawn randomly from the regex.json file into 10 sequences (generated the FASTQ file named `4b1f92dc-14e1-496f-a68b-d1683251d827.fastq`, and the summary file named `inserted.json` ).
 spikeq -r regex.json -n 1000 -l 200,800 spike-sequence --num-patterns 2 --num-sequences 10
 ```
+
+## Citation
+
+If you use `spikeq` in your research, please cite as follows:
+
+Crosbie, N.D. (2024). spikeq: A synthetic FASTQ record generator with regex pattern spiking.  XXXX DOI: XXXX
+
 ## License
 
 This project is licensed under the MIT License.
