@@ -10,7 +10,7 @@ documentation = "https://github.com/Rbfinch/spikeq"
 repository = "https://github.com/Rbfinch/spikeq"
 readme = "README.md"
 categories = ["science"]
-keywords = ["bioinformatics", "FASTQ", "JSON", "regex", "random spiking"]
+keywords = ["bioinformatics", "FASTQ", "JSON", "regex", "spike"]
 
 [dependencies]
 seq_io = "0.3.2"
