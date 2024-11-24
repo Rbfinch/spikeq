@@ -55,6 +55,10 @@ Crosbie, N.D. (2024). spikeq: A synthetic FASTQ record generator with regex patt
 
 see [CHANGELOG](https://github.com/Rbfinch/spikeq/blob/main/CHANGELOG.md)
 
+## Logo attribution
+
+The logo was created using [Inkscape](https://inkscape.org/) and is based on the Thorn Helix SVG Vector at SVGRepo (https://www.svgrepo.com/svg/321583/thorn-helix).
+
 ## License
 
 MIT
