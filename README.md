@@ -51,6 +51,10 @@ If you use `spikeq` in your research, please cite as follows:
 
 Crosbie, N.D. (2024). spikeq: A synthetic FASTQ record generator with regex pattern spiking.  XXXX DOI: XXXX
 
+## Update changes
+
+see [CHANGELOG](https://github.com/Rbfinch/spikeq/blob/main/CHANGELOG.md)
+
 ## License
 
 This project is licensed under the MIT License.
