@@ -15,6 +15,7 @@ _Generates synthetic FASTQ records free of regex patterns, or containing sequenc
 
 Get instructions and examples using `spikeq -h`, and `spikeq spike-sequence -h` for help on the `spike-sequence` subcommand.
 
+>[!NOTE]
 The regex patterns should only include the DNA sequence characters (A, C, G, T), and not IUPAC ambiguity codes (N, R, Y, etc.). If your regex patterns contain any IUPAC ambiguity codes, then transform them to DNA sequence characters (A, C, G, T) before using them with `spikeq`. See `regex.json` in the `examples` directory for an example of valid pattern file.
 
 ## Requirements
@@ -32,7 +33,6 @@ The regex patterns should only include the DNA sequence characters (A, C, G, T),
     - Run `cargo build --release`
     - Relative to the cloned parent directory, the executable will be located in `./target/release`
     - Make sure the executable is in your `PATH` or use the full path to the executable
-
 
 
 ## Examples
@@ -57,4 +57,4 @@ see [CHANGELOG](https://github.com/Rbfinch/spikeq/blob/main/CHANGELOG.md)
 
 ## License
 
-This project is licensed under the MIT License.
+MIT
