@@ -23,6 +23,12 @@ use clap::{Parser, Subcommand};
 
              - Regex patterns with look-around and backreferences are not supported.
 
+          CITATION:
+          
+               If you use `spikeq` in your research, please cite as follows:
+             
+                  Crosbie, N.D. (2024). spikeq: A synthetic FASTQ record generator with regex pattern spiking.  XXXX DOI: XXXX
+
 Copyright (c) 2024 Nicholas D. Crosbie, licensed under the MIT License."
 )]
 
