@@ -5,14 +5,14 @@ use clap::{Parser, Subcommand};
     name = "spikeq",
     author = "Nicholas D. Crosbie",
     version = clap::crate_version!(),
-    about = "A synthetic FASTQ record generator with regex pattern spiking",
+    about = "A synthetic FASTQ record generator with pattern spiking.",
     long_about = "Copyright (c) 2024 Nicholas D. Crosbie, licensed under the MIT License.",
     after_help = "
        EXAMPLES:
              - Generate 1000 synthetic FASTQ records with sequence lengths between 200 and 800, and which are free from the regex patterns specified in the regex.json file
                   `spikeq -r regex.json -n 1000 -l 200,800`
 
-             - Generate 1000 synthetic FASTQ records with sequence lengths between 200 and 800, and which are free from the regex patterns specified in the regex.json file, then insert two regex patterns drawn randomly from the regex.json file into 10 sequences (generated the FASTQ file named `4b1f92dc-14e1-496f-a68b-d1683251d827.fastq`, and the summary file named `inserted.json` )
+             - Generate 1000 synthetic FASTQ records with sequence lengths between 200 and 800, and which are free from the regex patterns specified in the regex.json file, then insert two patterns generated from the regex.json file into 10 sequences
                   `spikeq -r regex.json -n 1000 -l 200,800 spike-sequence --num-patterns 2 --num-sequences 10`
 
            TIPS:
@@ -27,7 +27,7 @@ use clap::{Parser, Subcommand};
           
                If you use `spikeq` in your research, please cite as follows:
              
-                  Crosbie, N.D. (2024). spikeq: A synthetic FASTQ record generator with regex pattern spiking.  XXXX DOI: XXXX
+                  Crosbie, N.D. (2024). spikeq: A synthetic FASTQ record generator with pattern spiking. 10.5281/zenodo.14211052.
 
 Copyright (c) 2024 Nicholas D. Crosbie, licensed under the MIT License."
 )]
@@ -64,9 +64,7 @@ pub struct Args {
 
 #[derive(Subcommand)]
 pub enum Commands {
-    #[command(
-        about = "Generates synthetic FASTQ file containing sequences with spiked regex patterns"
-    )]
+    #[command(about = "Generates synthetic FASTQ file containing sequences with spiked patterns")]
     SpikeSequence {
         #[arg(short = 'n', long, help = "Number of patterns to spike into sequences")]
         num_patterns: usize,
