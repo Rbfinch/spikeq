@@ -1,8 +1,8 @@
-<!-- <img src="src/grepq-icon.svg" width="128" /> -->
+<img src="src/spikeq-icon.png" width="128" />
 
 _Generates synthetic FASTQ records free of sequences defined by regex patterns, or containing spiked sequences based on regex patterns_
 
-<!-- [![Crates.io](https://img.shields.io/crates/v/grepq.svg)](https://crates.io/crates/grepq) -->
+[![Crates.io](https://img.shields.io/crates/v/spikeq.svg)](https://crates.io/crates/spikeq)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 ## Feature set
