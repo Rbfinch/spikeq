@@ -177,7 +177,7 @@ fn main() {
         }
     }
 
-    fs::write(format!("{}", uuid), output).expect("Unable to write to file");
+    fs::write(uuid, output).expect("Unable to write to file");
 }
 
 fn expand_strings(strings: Vec<String>, re: &Regex, replacements: &[&str]) -> Vec<String> {

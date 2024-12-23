@@ -1,4 +1,37 @@
-use clap::{Parser, Subcommand};
+use clap::Parser;
+use colored::*;
+use once_cell::sync::Lazy;
+
+static AFTER_HELP: Lazy<String> = Lazy::new(|| {
+    format!(
+        "{}{}{}{}{}{}{}{}{}{}{}{}{}",
+        "Examples:".bold().underline(),
+        "\n\nGenerate 1000 synthetic FASTQ records with sequence lengths between
+200 and 800, and which are free from the regex patterns specified in the 
+regex.json file".italic(),
+        "\nspikeq -r regex.json -n 1000 -l 200,800".bold(),
+        "\n\nGenerate 1000 synthetic FASTQ records with sequence lengths between
+200 and 800, and which are free from the regex patterns specified in the
+regex.json file, then insert two patterns generated from the regex.json file
+into 10 sequences".italic(),
+        "\nspikeq -r regex.json -n 1000 -l 200,800 spike-sequence --num-patterns 2 --num-sequences 10".bold(),
+        "\n\nTips:".bold().underline(),
+        "\n\nEnsure you have enough storage space for output files.",
+        "\n\nNotes:".bold().underline(),
+        "\n\nThe regex patterns should only include the DNA sequence characters
+(A, C, G, T), and not IUPAC ambiguity codes (N, R, Y, etc.). If your regex
+patterns contain any IUPAC ambiguity codes, then transform them to DNA sequence
+characters (A, C, G, T) before using them with `spikeq`. See `regex.json` in the
+`examples` directory for an example of valid pattern file.
+
+Regex patterns with look-around and backreferences are not supported.",
+        "\n\nCitation:".bold().underline(),
+        "\n\nIf you use `spikeq` in your research, please cite as follows:",
+        "\n\nCrosbie, N.D. (2024). spikeq: A synthetic FASTQ record generator
+with pattern spiking. 10.5281 zenodo.14211052.",
+        "\n\nCopyright (c) 2024 Nicholas D. Crosbie, licensed under the MIT License."
+    )
+});
 
 #[derive(Parser)]
 #[command(
@@ -6,30 +39,9 @@ use clap::{Parser, Subcommand};
     author = "Nicholas D. Crosbie",
     version = clap::crate_version!(),
     about = "A synthetic FASTQ record generator with pattern spiking.",
+    term_width = 80,
     long_about = "Copyright (c) 2024 Nicholas D. Crosbie, licensed under the MIT License.",
-    after_help = "
-       EXAMPLES:
-             - Generate 1000 synthetic FASTQ records with sequence lengths between 200 and 800, and which are free from the regex patterns specified in the regex.json file
-                  `spikeq -r regex.json -n 1000 -l 200,800`
-
-             - Generate 1000 synthetic FASTQ records with sequence lengths between 200 and 800, and which are free from the regex patterns specified in the regex.json file, then insert two patterns generated from the regex.json file into 10 sequences
-                  `spikeq -r regex.json -n 1000 -l 200,800 spike-sequence --num-patterns 2 --num-sequences 10`
-
-           TIPS:
-             - Ensure you have enough storage space for output files.
-
-          NOTES:
-             - The regex patterns should only include the DNA sequence characters (A, C, G, T), and not IUPAC ambiguity codes (N, R, Y, etc.). If your regex patterns contain any IUPAC ambiguity codes, then transform them to DNA sequence characters (A, C, G, T) before using them with `spikeq`. See `regex.json` in the `examples` directory for an example of valid pattern file.
-
-             - Regex patterns with look-around and backreferences are not supported.
-
-          CITATION:
-          
-               If you use `spikeq` in your research, please cite as follows:
-             
-                  Crosbie, N.D. (2024). spikeq: A synthetic FASTQ record generator with pattern spiking. 10.5281/zenodo.14211052.
-
-Copyright (c) 2024 Nicholas D. Crosbie, licensed under the MIT License."
+    after_help = &**AFTER_HELP
 )]
 
 pub struct Args {
@@ -62,7 +74,7 @@ pub struct Args {
     pub command: Option<Commands>,
 }
 
-#[derive(Subcommand)]
+#[derive(clap::Subcommand)]
 pub enum Commands {
     #[command(about = "Generates synthetic FASTQ file containing sequences with spiked patterns")]
     SpikeSequence {
