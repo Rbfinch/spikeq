@@ -1,6 +1,6 @@
 [package]
 name = "spikeq"
-version = "1.0.0"
+version = "1.0.1"
 edition = "2021"
 authors = ["Nicholas D. Crosbie"]
 license = "MIT"
