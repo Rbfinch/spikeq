@@ -85,22 +85,29 @@ pub enum Commands {
     },
 }
 
-fn parse_length_range(s: &str) -> Result<(usize, usize), String> {
+fn parse_length_range(s: &str) -> std::result::Result<(usize, usize), String> {
     let parts: Vec<&str> = s.split(',').collect();
     if parts.len() != 2 {
-        return Err(format!("Invalid length range: {}", s));
-    }
-    let min_length = parts[0]
-        .parse::<usize>()
-        .map_err(|_| format!("Invalid number: {}", parts[0]))?;
-    let max_length = parts[1]
-        .parse::<usize>()
-        .map_err(|_| format!("Invalid number: {}", parts[1]))?;
-    if min_length > max_length {
         return Err(format!(
-            "Min length cannot be greater than max length: {}",
+            "Invalid length range: {}. Expected format is MIN,MAX",
             s
         ));
     }
+
+    let min_length = parts[0]
+        .parse::<usize>()
+        .map_err(|_| format!("Invalid minimum length: {}", parts[0]))?;
+
+    let max_length = parts[1]
+        .parse::<usize>()
+        .map_err(|_| format!("Invalid maximum length: {}", parts[1]))?;
+
+    if min_length > max_length {
+        return Err(format!(
+            "Minimum length ({}) cannot be greater than maximum length ({})",
+            min_length, max_length
+        ));
+    }
+
     Ok((min_length, max_length))
 }
