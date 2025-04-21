@@ -93,5 +93,7 @@ rsconnect/
 target/
 
 # Other project specific ignores and allows
+.github/
 test.txt
 inserted.json
+TODO.md
