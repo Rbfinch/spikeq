@@ -5,7 +5,7 @@ mod read_regex;
 use crate::arg::{Args, Commands}; // Import Args and Commands
 use clap::Parser;
 use iupac::get_iupac_regexes;
-use rand::seq::SliceRandom;
+use rand::prelude::IndexedRandom;
 use rand::Rng;
 use read_regex::read_base_strings_from_json;
 use regex::Regex;
@@ -29,11 +29,11 @@ struct RegexSet {
 
 fn generate_sequence(min_length: usize, max_length: usize, regex_patterns: &[Regex]) -> String {
     let chars = ['A', 'C', 'T', 'G'];
-    let mut rng = rand::thread_rng();
-    let length = rng.gen_range(min_length..=max_length);
+    let mut rng = rand::rng();
+    let length = rng.random_range(min_length..=max_length);
     loop {
         let sequence: String = (0..length)
-            .map(|_| chars[rng.gen_range(0..chars.len())])
+            .map(|_| chars[rng.random_range(0..chars.len())])
             .collect();
         if !regex_patterns.iter().any(|re| re.is_match(&sequence)) {
             return sequence;
@@ -43,10 +43,10 @@ fn generate_sequence(min_length: usize, max_length: usize, regex_patterns: &[Reg
 
 fn generate_quality_line(length: usize, regex_patterns: &[Regex]) -> String {
     let chars: Vec<char> = r#"!\"\#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~"#.chars().collect();
-    let mut rng = rand::thread_rng();
+    let mut rng = rand::rng();
     loop {
         let line: String = (0..length)
-            .map(|_| chars[rng.gen_range(0..chars.len())])
+            .map(|_| chars[rng.random_range(0..chars.len())])
             .collect();
         if !regex_patterns.iter().any(|re| re.is_match(&line)) {
             return line;
@@ -55,9 +55,9 @@ fn generate_quality_line(length: usize, regex_patterns: &[Regex]) -> String {
 }
 
 fn insert_patterns(sequence: &mut String, patterns: &[Regex]) {
-    let mut rng = rand::thread_rng();
+    let mut rng = rand::rng();
     for pattern in patterns {
-        let pos = rng.gen_range(0..=sequence.len());
+        let pos = rng.random_range(0..=sequence.len());
         sequence.insert_str(pos, pattern.as_str());
     }
 }
@@ -94,7 +94,7 @@ fn main() {
             num_patterns,
             num_sequences: num_spiked_sequences,
         }) => {
-            let mut rng = rand::thread_rng();
+            let mut rng = rand::rng();
             let selected_patterns: Vec<Regex> = regex_patterns
                 .choose_multiple(&mut rng, *num_patterns)
                 .cloned()

@@ -1,6 +1,8 @@
-<img src="src/spikeq-icon.png" width="128" />
+# spikeq
 
-_Generates synthetic FASTQ records free of sequences defined by regex patterns, or containing spiked sequences based on regex patterns_
+![SpikeQ Icon](src/spikeq-icon.png)
+
+## Generates synthetic FASTQ records free of sequences defined by regex patterns, or containing spiked sequences based on regex patterns
 
 [![Crates.io](https://img.shields.io/crates/v/spikeq.svg)](https://crates.io/crates/spikeq)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
@@ -11,31 +13,36 @@ _Generates synthetic FASTQ records free of sequences defined by regex patterns, 
 - Generates FASTQ records with random DNA sequences of specified lengths, and free from regex patterns specified in the regex pattern file
 - Inserts spike patterns derived from a regex set into a subset of sequences using the `spike-sequence` subcommand, resulting in a FASTQ file with a subset of sequences containing the inserted patterns, and a summary file of the inserted patterns
 
-## Usage 
+## Usage
 
-`spikeq` may be used test bioinformatics tools that process FASTQ files, such as `grepq` (https://github.com/Rbfinch/grepq)
+`spikeq` may be used to test bioinformatics tools that process FASTQ files, such as `grepq` (<https://github.com/Rbfinch/grepq>)
 
-Get instructions and examples using `spikeq -h`, and `spikeq spike-sequence -h` for help on the `spike-sequence` subcommand. 
+Get instructions and examples using `spikeq -h`, and `spikeq spike-sequence -h` for help on the `spike-sequence` subcommand.
 
->[!NOTE]
-The regex patterns should only include the DNA sequence characters (A, C, G, T), and not IUPAC ambiguity codes (N, R, Y, etc.). If your regex patterns contain any IUPAC ambiguity codes, then transform them to DNA sequence characters (A, C, G, T) before using them with `spikeq`. See `regex.json` in the `examples` directory for an example of valid pattern file.
+> **Note**
+> The regex patterns should only include the DNA sequence characters (A, C, G, T), and not IUPAC ambiguity codes (N, R, Y, etc.). If your regex patterns contain any IUPAC ambiguity codes, then transform them to DNA sequence characters (A, C, G, T) before using them with `spikeq`. See `regex.json` in the `examples` directory for an example of valid pattern file.
 
 ## Requirements
 
 - `spikeq` has been tested on Linux and macOS. It might work on Windows, but it has not been tested on this platform.
-- Ensure that Rust is installed on your system (https://www.rust-lang.org/tools/install)
+- Ensure that Rust is installed on your system (<https://www.rust-lang.org/tools/install>)
 - If the build fails, make sure you have the latest version of the Rust compiler by running `rustup update`
 
 ## Installation
-- From *crates.io* (easiest method)
-    - `cargo install spikeq`
 
-- From *source*
-    - Clone the repository and `cd` into the `spikeq` directory
-    - Run `cargo build --release`
-    - Relative to the cloned parent directory, the executable will be located in `./target/release`
-    - Make sure the executable is in your `PATH` or use the full path to the executable
+- From _crates.io_ (easiest method)
+  - `cargo install spikeq`
 
+- From _source_
+  - Clone the repository and `cd` into the `spikeq` directory
+  - Run `cargo build --release`
+  - Relative to the cloned parent directory, the executable will be located in `./target/release`
+  - Make sure the executable is in your `PATH` or use the full path to the executable
+
+- Shell Completions and Man Page
+  - After building from source, the build script generates shell completions and a man page
+  - To install the man page: `sudo cp target/release/build/spikeq-*/out/man/man1/spikeq.1 /usr/local/share/man/man1/`
+  - Shell completions can be found in `target/release/build/spikeq-*/out/completions/` for Bash, Zsh, and Fish
 
 ## Examples
 
@@ -55,11 +62,11 @@ Crosbie, N.D. (2024). spikeq: A synthetic FASTQ record generator with pattern sp
 
 ## Update changes
 
-see [CHANGELOG](https://github.com/Rbfinch/spikeq/blob/main/CHANGELOG.md)
+See [CHANGELOG](https://github.com/Rbfinch/spikeq/blob/main/CHANGELOG.md)
 
 ## Logo attribution
 
-The logo was created using [Inkscape](https://inkscape.org/) and is based on the Thorn Helix SVG Vector at SVGRepo (https://www.svgrepo.com/svg/321583/thorn-helix).
+The logo was created using [Inkscape](https://inkscape.org/) and is based on the Thorn Helix SVG Vector at SVGRepo (<https://www.svgrepo.com/svg/321583/thorn-helix>).
 
 ## License
 

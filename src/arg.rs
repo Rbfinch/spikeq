@@ -43,7 +43,6 @@ with pattern spiking. 10.5281 zenodo.14211052.",
     long_about = "Copyright (c) 2024 Nicholas D. Crosbie, licensed under the MIT License.",
     after_help = &**AFTER_HELP
 )]
-
 pub struct Args {
     #[arg(
         short,

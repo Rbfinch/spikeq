@@ -91,3 +91,7 @@ rsconnect/
 
 # Rust build artifacts
 target/
+
+# Other project specific ignores and allows
+test.txt
+inserted.json
